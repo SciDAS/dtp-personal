@@ -1,0 +1,23 @@
+# Default values for nextflow-api.
+# Declare variables to be passed into your templates.
+
+#PVC_NAME="$1"
+#PVC_PATH="/workspace"
+#WORKFLOW_ID="$3"
+#POD_FILE="pod.yaml"
+#POD_NAME="nf-api-load-$(printf %04x $RANDOM)"
+#LOCAL_PATH="$(realpath $2)"
+
+
+# PVC
+PVC:
+  Name: deepgtex-prp
+  Path: /workspace
+
+# iRODS
+iRODS:
+
+# NDN
+NDN:
+
+

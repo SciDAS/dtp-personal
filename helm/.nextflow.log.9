@@ -1,0 +1,34 @@
+Nov-11 14:31:31.551 [main] DEBUG nextflow.cli.Launcher - $> nextflow kuberun login -v task-pv-claim
+Nov-11 14:31:37.274 [main] DEBUG nextflow.k8s.K8sConfig - Kubernetes workDir=/workspace/cole/work; projectDir=/workspace/projects; volumeClaims=[task-pv-claim]
+Nov-11 14:31:41.708 [main] ERROR nextflow.cli.Launcher - @unknown
+nextflow.k8s.client.K8sResponseException: Request GET /api/v1/namespaces/default/persistentvolumeclaims/task-pv-claim returned an error code=403
+
+  {
+      "kind": "Status",
+      "apiVersion": "v1",
+      "metadata": {
+          
+      },
+      "status": "Failure",
+      "message": "persistentvolumeclaims \"task-pv-claim\" is forbidden: User \"system:serviceaccount:default:default\" cannot get resource \"persistentvolumeclaims\" in API group \"\" in the namespace \"default\"",
+      "reason": "Forbidden",
+      "details": {
+          "name": "task-pv-claim",
+          "kind": "persistentvolumeclaims"
+      },
+      "code": 403
+  }
+
+	at nextflow.k8s.client.K8sClient.makeRequest(K8sClient.groovy:369)
+	at nextflow.k8s.client.K8sClient.makeRequest(K8sClient.groovy)
+	at nextflow.k8s.client.K8sClient.get(K8sClient.groovy:378)
+	at nextflow.k8s.client.K8sClient.volumeClaimRead(K8sClient.groovy:428)
+	at nextflow.k8s.K8sConfig.checkStorageAndPaths(K8sConfig.groovy:215)
+	at nextflow.k8s.K8sConfig$checkStorageAndPaths$0.call(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:115)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:127)
+	at nextflow.k8s.K8sDriverLauncher.run(K8sDriverLauncher.groovy:122)
+	at nextflow.cli.CmdKubeRun.run(CmdKubeRun.groovy:74)
+	at nextflow.cli.Launcher.run(Launcher.groovy:451)
+	at nextflow.cli.Launcher.main(Launcher.groovy:633)

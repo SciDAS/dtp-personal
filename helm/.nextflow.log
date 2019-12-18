@@ -1,0 +1,4 @@
+Nov-14 09:42:04.938 [main] DEBUG nextflow.cli.Launcher - $> nextflow kuberun login -v nextflow-api-pvc-new
+Nov-14 09:42:06.366 [main] DEBUG nextflow.k8s.K8sConfig - Kubernetes workDir=/workspace/cole/work; projectDir=/workspace/projects; volumeClaims=[nextflow-api-pvc-new]
+Nov-14 09:42:07.087 [main] DEBUG nextflow.k8s.K8sDriverLauncher - Created K8s configMap with name: nf-config-ad6d2b95
+Nov-14 10:03:00.176 [main] DEBUG nextflow.k8s.K8sDriverLauncher - Wait for pod termination name=sick-wright

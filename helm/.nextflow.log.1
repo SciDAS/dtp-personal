@@ -1,0 +1,13 @@
+Nov-14 09:41:30.812 [main] DEBUG nextflow.cli.Launcher - $> nextflow kuberun login -v pvc-8be4fba1-00d5-11ea-b80d-42010a8e0073
+Nov-14 09:41:31.657 [main] DEBUG nextflow.k8s.K8sConfig - Kubernetes workDir=/workspace/cole/work; projectDir=/workspace/projects; volumeClaims=[pvc-8be4fba1-00d5-11ea-b80d-42010a8e0073]
+Nov-14 09:41:32.220 [main] DEBUG nextflow.cli.Launcher - Operation aborted
+nextflow.exception.AbortOperationException: Unknown volume claim: pvc-8be4fba1-00d5-11ea-b80d-42010a8e0073 -- make sure a persistent volume claim with the specified name is defined in your K8s cluster
+	at nextflow.k8s.K8sConfig.checkStorageAndPaths(K8sConfig.groovy:219)
+	at nextflow.k8s.K8sConfig$checkStorageAndPaths$0.call(Unknown Source)
+	at org.codehaus.groovy.runtime.callsite.CallSiteArray.defaultCall(CallSiteArray.java:47)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:115)
+	at org.codehaus.groovy.runtime.callsite.AbstractCallSite.call(AbstractCallSite.java:127)
+	at nextflow.k8s.K8sDriverLauncher.run(K8sDriverLauncher.groovy:122)
+	at nextflow.cli.CmdKubeRun.run(CmdKubeRun.groovy:74)
+	at nextflow.cli.Launcher.run(Launcher.groovy:451)
+	at nextflow.cli.Launcher.main(Launcher.groovy:633)

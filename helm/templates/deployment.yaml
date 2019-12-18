@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "dtp.fullname" . }}
+  labels:
+    app: {{ template "dtp.name" . }}
+    chart: {{ template "dtp.chart" . }}
+    release: {{ .Release.Name }}
+    instance: {{ .Values.Instance }}
+spec:
+  replicas: {{ .Values.Replicas }}
+  selector:
+    matchLabels:
+      app: {{ template "dtp.name" . }}
+      instance: {{ .Values.Instance }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "dtp.name" . }}
+        chart: {{ template "dtp.chart" . }}
+        release: {{ .Release.Name }}
+        instance: {{ .Values.Instance }}
+    spec:
+      containers:
+      - name: dtp
+        image: ubuntu
+        args: ["sleep", "infinity"]
+        volumeMounts:
+        - mountPath: {{ .Values.PVC.Path }}
+          name: {{ .Values.PVC.Name }}
+      restartPolicy: Never
+      volumes:
+        - name: {{ .Values.PVC.Name }}
+          persistentVolumeClaim:
+	    claimName: {{ .Values.PVC.Name }}
