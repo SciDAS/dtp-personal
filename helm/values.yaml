@@ -10,14 +10,38 @@
 
 
 # PVC
-PVC:
+
+ExistingPVC:
+  # If true, use existing PVC on local cluster.
+  # (temp, future PVCs will be dynamically configurable)
+  Enabled: true
   Name: deepgtex-prp
   Path: /workspace
 
-# iRODS
-iRODS:
+NewPVC:
+  # If true, create new PVC on local cluster.
+  # (temp, future PVCs will be dynamically configurable)
+  Enabled: false
+  Name: dtp-pvc
+  Size: 8Gi
+  StorageClass: nfs # Make sure storage class provisioner exists!
+  Path: /workspace
+
+
+# Aspera
+Aspera:
+
 
 # NDN
 NDN:
+
+
+# iRODS
+iRODS:
+  Enabled: true
+
+
+
+
 
 

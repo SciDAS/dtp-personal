@@ -1,15 +1,15 @@
 #!/bin/sh
 
-export KUBE_CONFIG=$(cat ~/.kube/config | base64 | tr -d '\n')
+export IRODS_ENV=$(cat $1 | base64 | tr -d '\n')
 
 cat > templates/secret.yaml <<EOF
 apiVersion: v1
 kind: Secret
 metadata:
-  name: kubeconfig
+  name: irods
 type: Opaque
 data:
-  config: ${KUBE_CONFIG}
+  config: ${IRODS_ENV}
 EOF
 
 cat templates/secret.yaml

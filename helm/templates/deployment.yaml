@@ -23,13 +23,34 @@ spec:
     spec:
       containers:
       - name: dtp
-        image: ubuntu
+        image: cbmckni/dtp
         args: ["sleep", "infinity"]
         volumeMounts:
-        - mountPath: {{ .Values.PVC.Path }}
-          name: {{ .Values.PVC.Name }}
-      restartPolicy: Never
+        - name: vol-1
+        {{ if .Values.NewPVC.Enabled }}
+          mountPath: {{ .Values.NewPVC.Path }}
+        {{ else if .Values.ExistingPVC.Enabled }}
+          mountPath: {{ .Values.ExistingPVC.Path }}
+        {{ end }}
+        {{ if .Values.iRODS.Enabled }}
+        - name: ienv
+          mountPath: "/"
+        {{ end }}
+      restartPolicy: Always
       volumes:
-        - name: {{ .Values.PVC.Name }}
+        {{ if .Values.NewPVC.Enabled }}
+        - name: vol-1
           persistentVolumeClaim:
-	    claimName: {{ .Values.PVC.Name }}
+            claimName: {{ .Values.NewPVC.Name }}
+        {{ end }}
+        {{ if .Values.ExistingPVC.Enabled }}
+        - name: vol-1
+          persistentVolumeClaim:
+            claimName: {{ .Values.ExistingPVC.Name }}
+        {{ end }}
+        {{ if .Values.iRODS.Enabled }}
+        - name: ienv
+          secret:
+            secretName: irods
+            defaultMode: 256
+        {{ end }}

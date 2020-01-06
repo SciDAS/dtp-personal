@@ -1,8 +1,8 @@
-{{ if .Values.NewLocalPVC.Enabled }}
+{{ if .Values.NewPVC.Enabled }}
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ .Values.NewLocalPVC.Name }}
+  name: {{ .Values.NewPVC.Name }}
   labels:
     app: {{ template "nextflow-api.name" . }}
     chart: {{ template "nextflow-api.chart" . }}
@@ -11,8 +11,8 @@ metadata:
 spec:
   accessModes:
     - ReadWriteMany
-  storageClassName: {{ .Values.NewLocalPVC.StorageClass }}
+  storageClassName: {{ .Values.NewPVC.StorageClass }}
   resources:
     requests:
-      storage: {{ .Values.NewLocalPVC.Size }}
+      storage: {{ .Values.NewPVC.Size }}
 {{ end }}
