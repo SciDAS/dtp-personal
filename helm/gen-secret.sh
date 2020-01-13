@@ -1,15 +1,18 @@
 #!/bin/sh
 
 export IRODS_ENV=$(cat $1 | base64 | tr -d '\n')
+export IRODS_PASS=$2
 
-cat > templates/secret.yaml <<EOF
+cat > templates/irods-secret.yaml <<EOF
 apiVersion: v1
 kind: Secret
 metadata:
   name: irods
 type: Opaque
+stringData:
+    IRODS_PASSWORD: "${IRODS_PASS}"
 data:
-  config: ${IRODS_ENV}
+  irods_environment.json: ${IRODS_ENV}
 EOF
 
-cat templates/secret.yaml
+cat templates/irods-secret.yaml

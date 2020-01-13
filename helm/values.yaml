@@ -16,7 +16,7 @@ ExistingPVC:
   # (temp, future PVCs will be dynamically configurable)
   Enabled: true
   Name: deepgtex-prp
-  Path: /workspace
+  Path: /workspace/dtp
 
 NewPVC:
   # If true, create new PVC on local cluster.

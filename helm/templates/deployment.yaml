@@ -24,33 +24,43 @@ spec:
       containers:
       - name: dtp
         image: cbmckni/dtp
-        args: ["sleep", "infinity"]
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && sleep infinity" ]
         volumeMounts:
         - name: vol-1
-        {{ if .Values.NewPVC.Enabled }}
-          mountPath: {{ .Values.NewPVC.Path }}
-        {{ else if .Values.ExistingPVC.Enabled }}
-          mountPath: {{ .Values.ExistingPVC.Path }}
-        {{ end }}
+          mountPath: {{ template "pvcPath" . }}
         {{ if .Values.iRODS.Enabled }}
         - name: ienv
-          mountPath: "/"
+          mountPath: "/etc/.irods"
+        env: 
+            - 
+              name: IRODS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: irods
+                  key: IRODS_PASSWORD
         {{ end }}
       restartPolicy: Always
       volumes:
-        {{ if .Values.NewPVC.Enabled }}
         - name: vol-1
           persistentVolumeClaim:
-            claimName: {{ .Values.NewPVC.Name }}
-        {{ end }}
-        {{ if .Values.ExistingPVC.Enabled }}
-        - name: vol-1
-          persistentVolumeClaim:
-            claimName: {{ .Values.ExistingPVC.Name }}
-        {{ end }}
+            claimName: {{ template "pvcName" . }}
         {{ if .Values.iRODS.Enabled }}
         - name: ienv
           secret:
             secretName: irods
             defaultMode: 256
         {{ end }}
+
+
+# Variables
+
+{{- define "pvcPath" -}}
+{{- if .Values.NewPVC.Enabled }}{{ .Values.NewPVC.Path }}{{ else }}{{ .Values.ExistingPVC.Path }}{{ end }}
+{{- end -}}
+
+{{- define "pvcName" -}}
+{{- if .Values.NewPVC.Enabled }}{{ .Values.NewPVC.Name }}{{ else }}{{ .Values.ExistingPVC.Name }}{{ end }}
+{{- end -}}
+
+

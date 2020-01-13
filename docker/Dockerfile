@@ -13,6 +13,10 @@ USER dtpuser
 WORKDIR /home/dtpuser
 
 
+
+
+
+
 ## Aspera
 
 RUN wget https://download.asperasoft.com/download/sw/connect/3.9.8/ibm-aspera-connect-3.9.8.176272-linux-g2.12-64.tar.gz \
@@ -79,11 +83,13 @@ RUN wget -qO - https://packages.irods.org/irods-signing-key.asc | apt-key add - 
 # Cleanup
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-COPY irods_environment.json /
 
-COPY docker-entrypoint.sh /
-RUN chmod u+x /docker-entrypoint.sh
-ENTRYPOINT ["/docker-entrypoint.sh"]
 
+
+
+# Entrypoint and expose port
 EXPOSE 1247
-CMD ["ihelp"]
+COPY ./docker-entrypoint.sh /
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD exec /bin/bash -c "trap : TERM INT; sleep infinity & wait"
