@@ -71,7 +71,7 @@ To interact with any of the running containers, run [interact.sh](https://github
 
 ### Delete
 
-To destroy the DTP when all transfers are complete, run 'helm uninstall dtp`
+To destroy the DTP when all transfers are complete, run `helm uninstall dtp`
 
 That's it for now!
 
