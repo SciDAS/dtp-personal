@@ -1,46 +1,53 @@
-# Default values for nextflow-api.
 # Declare variables to be passed into your templates.
 
-#PVC_NAME="$1"
-#PVC_PATH="/workspace"
-#WORKFLOW_ID="$3"
-#POD_FILE="pod.yaml"
-#POD_NAME="nf-api-load-$(printf %04x $RANDOM)"
-#LOCAL_PATH="$(realpath $2)"
 
+# Interactive
+Interactive:
+  Enabled: true
 
 # PVC
 
 ExistingPVC:
   # If true, use existing PVC on local cluster.
   # (temp, future PVCs will be dynamically configurable)
-  Enabled: true
+  Enabled: false
   Name: deepgtex-prp
   Path: /workspace/dtp
 
 NewPVC:
   # If true, create new PVC on local cluster.
   # (temp, future PVCs will be dynamically configurable)
-  Enabled: false
+  Enabled: true
   Name: dtp-pvc
-  Size: 8Gi
+  Size: 20Gi
   StorageClass: nfs # Make sure storage class provisioner exists!
   Path: /workspace
 
 
 # Aspera
 Aspera:
-
+  Enabled: true
+  Secrets: false
 
 # NDN
 NDN:
-
+  Enabled: true
+  Secrets: false
 
 # iRODS
 iRODS:
   Enabled: true
+  Secrets: false
 
+# AWS S3
+S3:
+  Enabled: true
+  Secrets: false
 
+# MinIO
+Minio:
+  Enabled: true
+  Secrets: false
 
 
 
