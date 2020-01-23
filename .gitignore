@@ -1,2 +1,2 @@
 irods_environment.json
-helm/templates/secret.yaml
+helm/templates/*-secret.yaml

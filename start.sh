@@ -1,18 +1,18 @@
 #!/bin/bash
 
 # Arguments
-while getopts ":i" opt; do
-  case $opt in
-    i )
-      echo "Interactive mode enabled." >&2
-      INTERACTIVE=true
-      ;;
-    \? )
-      echo "Invalid option: -$OPTARG" >&2
-      exit 1
-      ;;
-  esac
-done
+#while getopts ":i" opt; do
+#  case $opt in
+#    i )
+#      echo "Interactive mode enabled." >&2
+#      INTERACTIVE=true
+#      ;;
+#    \? )
+#      echo "Invalid option: -$OPTARG" >&2
+#      exit 1
+#      ;;
+#  esac
+#done
 
 # Deploy DTP
 helm install dtp helm
@@ -29,15 +29,15 @@ while [ "${POD_STATUS}" != "Running" ]; do
 echo "DTP started."
 
 # Run entrypoint script
-sleep 1
-kubectl exec ${POD} -- /bin/bash /docker-entrypoint.sh
+# sleep 1
+# kubectl exec ${POD} -- /bin/bash /docker-entrypoint.sh
 
 # Start interactive session
-if [ $INTERACTIVE ] ; then
-    kubectl exec -it ${POD} -- /bin/bash
-fi
+# if [ $INTERACTIVE ] ; then
+#    kubectl exec -it ${POD} -- /bin/bash
+# fi
 
 
 
-helm uninstall dtp
+#helm uninstall dtp
 

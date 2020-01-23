@@ -21,15 +21,22 @@ spec:
         release: {{ .Release.Name }}
         instance: {{ .Values.Instance }}
     spec:
-      containers:
-      - name: dtp
-        image: cbmckni/dtp
+      containers:               
+      - name: dtp-base # Base image(also for local transfers)
+        image: ubuntu
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && sleep infinity" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
-        {{ if .Values.iRODS.Enabled }}
+      {{ if .Values.iRODS.Enabled }} # iRODS
+      - name: dtp-irods
+        image: cbmckni/dtp-irods 
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        volumeMounts:
+        - name: vol-1
+          mountPath: {{ template "pvcPath" . }}
         - name: ienv
           mountPath: "/etc/.irods"
         env: 
@@ -39,7 +46,76 @@ spec:
                 secretKeyRef:
                   name: irods
                   key: IRODS_PASSWORD
-        {{ end }}
+      {{ end }}
+      {{ if .Values.S3.Enabled }} # AWS S3
+      - name: dtp-s3
+        image: mesosphere/aws-cli
+        command: ["/bin/sh"]
+        args: ["-c", "apk update && apk upgrade && apk add bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
+        volumeMounts:
+        - name: vol-1
+          mountPath: {{ template "pvcPath" . }}
+        env:  
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws
+                  key: AWS_SECRET_ACCESS_KEY
+      {{ end }}
+      {{ if .Values.Minio.Enabled }} # MinIO
+      - name: dtp-minio
+        image: minio/mc
+        command: ["/bin/sh"]
+        args: ["-c", "apk update && apk upgrade && apk add bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
+        volumeMounts:
+        - name: vol-1
+          mountPath: {{ template "pvcPath" . }}
+        env:  
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws
+                  key: AWS_SECRET_ACCESS_KEY
+      {{ end }}
+      {{ if .Values.NDN.Enabled }} # Name Defined Network
+      - name: dtp-ndn
+        image: peetonn/ndn-docker
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        volumeMounts:
+        - name: vol-1
+          mountPath: {{ template "pvcPath" . }}
+      {{ end }}
+      {{ if .Values.Aspera.Enabled }} # Aspera
+      - name: dtp-aspera
+        image: ibmcom/aspera-cli
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        volumeMounts:
+        - name: vol-1
+          mountPath: {{ template "pvcPath" . }}
+        env:  
+            - name: ACLI_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: aspera
+                  key: ACLI_USERNAME
+            - name: ACLI_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: aspera
+                  key: ACLI_PASSWORD
+      {{ end }}
       restartPolicy: Always
       volumes:
         - name: vol-1
