@@ -18,7 +18,7 @@ NewPVC:
   # If true, create new PVC on local cluster.
   # (temp, future PVCs will be dynamically configurable)
   Enabled: true
-  Name: dtp-pvc
+  Name: dtp-pvc-new
   Size: 20Gi
   StorageClass: nfs # Make sure storage class provisioner exists!
   Path: /workspace
