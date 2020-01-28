@@ -37,15 +37,20 @@ NDN:
 # iRODS
 iRODS:
   Enabled: true
-  Secrets: false
+  Secrets: true
 
 # AWS S3
 S3:
   Enabled: true
-  Secrets: false
+  Secrets: true
 
 # MinIO
 Minio:
+  Enabled: true
+  Secrets: false
+
+# SRA Toolkit
+SRAToolkit:
   Enabled: true
   Secrets: false
 

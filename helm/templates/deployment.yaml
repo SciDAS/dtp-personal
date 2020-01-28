@@ -33,10 +33,11 @@ spec:
       - name: dtp-irods
         image: cbmckni/dtp-irods 
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && echo 'iinit ${IRODS_PASSWORD}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
+        {{ if .Values.iRODS.Secrets }}
         - name: ienv
           mountPath: "/etc/.irods"
         env: 
@@ -46,6 +47,13 @@ spec:
                 secretKeyRef:
                   name: irods
                   key: IRODS_PASSWORD
+            - 
+              name: IRODS_ENVIRONMENT_FILE
+              valueFrom:
+                secretKeyRef:
+                  name: irods
+                  key: IRODS_ENVIRONMENT_FILE
+        {{ end }}
       {{ end }}
       {{ if .Values.S3.Enabled }} # AWS S3
       - name: dtp-s3
@@ -55,6 +63,7 @@ spec:
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
+        {{ if .Values.S3.Secrets }}
         env:  
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
@@ -65,7 +74,8 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: aws
-                  key: AWS_SECRET_ACCESS_KEY
+                  key: AWS_SECRET_ACCESS_KEY 
+        {{ end }}
       {{ end }}
       {{ if .Values.Minio.Enabled }} # MinIO
       - name: dtp-minio
@@ -75,6 +85,7 @@ spec:
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
+        {{ if .Values.Minio.Secrets }}
         env:  
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
@@ -86,6 +97,7 @@ spec:
                 secretKeyRef:
                   name: aws
                   key: AWS_SECRET_ACCESS_KEY
+        {{ end }}
       {{ end }}
       {{ if .Values.NDN.Enabled }} # Name Defined Network
       - name: dtp-ndn
@@ -104,6 +116,7 @@ spec:
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
+        {{ if .Values.Aspera.Secrets }}
         env:  
             - name: ACLI_USERNAME
               valueFrom:
@@ -115,13 +128,23 @@ spec:
                 secretKeyRef:
                   name: aspera
                   key: ACLI_PASSWORD
+        {{ end }}
+      {{ end }}
+      {{ if .Values.SRAToolkit.Enabled }} # SRA Toolkit
+      - name: dtp-sra-toolkit
+        image: ncbi/sra-toolkit
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        volumeMounts:
+        - name: vol-1
+          mountPath: {{ template "pvcPath" . }}
       {{ end }}
       restartPolicy: Always
       volumes:
         - name: vol-1
           persistentVolumeClaim:
             claimName: {{ template "pvcName" . }}
-        {{ if .Values.iRODS.Enabled }}
+        {{ if .Values.iRODS.Secrets }}
         - name: ienv
           secret:
             secretName: irods
