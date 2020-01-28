@@ -68,21 +68,21 @@ On deployment, the Data Transfer Pod will automatically authenticate your creden
 
 In [values.yaml](https://github.com/cbmckni/dtp/blob/master/helm/values.yaml), you must either enable/disable the secrets for each protocol. 
 
-Next, enter your credentials in [config.sh](https://github.com/SciDAS/dtp/blob/master/helm/config.sh).
+Next, enter your credentials in [config](https://github.com/SciDAS/dtp/blob/master/helm/config).
 
-Finally, run [gen-secret.sh](https://github.com/SciDAS/dtp/blob/master/helm/gen-secret.sh): 
+Finally, run [gen-secret](https://github.com/SciDAS/dtp/blob/master/helm/gen-secret): 
 
-`./helm/gen-secret.sh`
+`./helm/gen-secret`
 
 Go over your secrets to make sure they are entered correctly(some will be base64 encoded and will not be human-readable).
 
 ## Usage
 
-To deploy the DTP, run [start.sh](https://github.com/cbmckni/dtp/blob/master/start.sh).
+To deploy the DTP, run [start](https://github.com/cbmckni/dtp/blob/master/start).
 
 It should output 'DTP started.' when finished.
 
-To interact with any of the running containers, run [interact.sh](https://github.com/cbmckni/dtp/blob/master/interact.sh).
+To interact with any of the running containers, run [interact](https://github.com/cbmckni/dtp/blob/master/interact).
 
 ## Delete
 
