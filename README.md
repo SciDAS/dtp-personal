@@ -17,7 +17,8 @@ Right now, the supported protocols are:
  - Aspera
  - S3
  - MinIO
- - Local transfers(from the user's local machine)
+ - SRA Toolkit(NCBI)
+ - Local transfers(to/from the user's local machine)
 
 ## Installation
 
@@ -47,7 +48,7 @@ Check that the `nfs` storage class exists:
 
 Make sure to edit the [values.yaml](https://github.com/cbmckni/dtp/blob/master/helm/values.yaml) file later to use this storage class and size!
 
-## Usage
+## Configuration
 
 These are the steps necesary to use the Data Transfer Pod.
 
@@ -59,9 +60,23 @@ Configure the PVC section to either create a new PVC or use an existing one.
 
 Enable/Disable each data transfer protocol to your needs by changing them to `true` or `false`.
 
-Don't worry about secrets for now, full support will come later.
+### Secrets
 
-### Deploy and Interact
+On deployment, the Data Transfer Pod will automatically authenticate your credentials with the associated protocol(s).
+
+*This is not required for Interactive Mode, but necessary for some background transfers.*
+
+In [values.yaml](https://github.com/cbmckni/dtp/blob/master/helm/values.yaml), you must either enable/disable the secrets for each protocol. 
+
+Next, enter your credentials in [config.sh](https://github.com/SciDAS/dtp/blob/master/helm/config.sh).
+
+Finally, run [gen-secret.sh](https://github.com/SciDAS/dtp/blob/master/helm/gen-secret.sh): 
+
+`./helm/gen-secret.sh`
+
+Go over your secrets to make sure they are entered correctly(some will be base64 encoded and will not be human-readable).
+
+## Usage
 
 To deploy the DTP, run [start.sh](https://github.com/cbmckni/dtp/blob/master/start.sh).
 
@@ -69,7 +84,7 @@ It should output 'DTP started.' when finished.
 
 To interact with any of the running containers, run [interact.sh](https://github.com/cbmckni/dtp/blob/master/interact.sh).
 
-### Delete
+## Delete
 
 To destroy the DTP when all transfers are complete, run `helm uninstall dtp`
 

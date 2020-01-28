@@ -1,0 +1,9 @@
+#!/bin/bash
+
+IRODS_ENV_FILE_PATH="irodspath"
+IRODS_PASS="irodspass"
+AWS_ACCESS_KEY_ID="awsuser"
+AWS_SECRET_ACCESS_KEY="awspass"
+ACLI_USER="asperauser"
+ACLI_PASS="asperapass"
+
