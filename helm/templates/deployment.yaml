@@ -26,6 +26,10 @@ spec:
         image: ubuntu
         command: [ "/bin/bash", "-c", "--" ]
         args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        resources:
+          requests:
+            cpu: {{ .Values.Resources.CPU }}
+            memory: {{ .Values.Resources.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
@@ -34,6 +38,10 @@ spec:
         image: cbmckni/dtp-irods 
         command: [ "/bin/bash", "-c", "--" ]
         args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && echo 'iinit ${IRODS_PASSWORD}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        resources:
+          requests:
+            cpu: {{ .Values.Resources.CPU }}
+            memory: {{ .Values.Resources.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
@@ -55,15 +63,19 @@ spec:
                   key: IRODS_ENVIRONMENT_FILE
         {{ end }}
       {{ end }}
-      {{ if .Values.S3.Enabled }} # AWS S3
-      - name: dtp-s3
+      {{ if .Values.AWS.Enabled }} # AWS CLI
+      - name: dtp-aws
         image: mesosphere/aws-cli
         command: ["/bin/sh"]
         args: ["-c", "apk update && apk upgrade && apk add bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
+        resources:
+          requests:
+            cpu: {{ .Values.Resources.CPU }}
+            memory: {{ .Values.Resources.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
-        {{ if .Values.S3.Secrets }}
+        {{ if .Values.AWS.Secrets }}
         env:  
             - name: AWS_ACCESS_KEY_ID
               valueFrom:
@@ -82,6 +94,10 @@ spec:
         image: minio/mc
         command: ["/bin/sh"]
         args: ["-c", "apk update && apk upgrade && apk add bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
+        resources:
+          requests:
+            cpu: {{ .Values.Resources.CPU }}
+            memory: {{ .Values.Resources.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
@@ -104,6 +120,10 @@ spec:
         image: peetonn/ndn-docker
         command: [ "/bin/bash", "-c", "--" ]
         args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        resources:
+          requests:
+            cpu: {{ .Values.Resources.CPU }}
+            memory: {{ .Values.Resources.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
@@ -113,6 +133,10 @@ spec:
         image: ibmcom/aspera-cli
         command: [ "/bin/bash", "-c", "--" ]
         args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        resources:
+          requests:
+            cpu: {{ .Values.Resources.CPU }}
+            memory: {{ .Values.Resources.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
@@ -135,6 +159,10 @@ spec:
         image: ncbi/sra-toolkit
         command: [ "/bin/bash", "-c", "--" ]
         args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        resources:
+          requests:
+            cpu: {{ .Values.Resources.CPU }}
+            memory: {{ .Values.Resources.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}

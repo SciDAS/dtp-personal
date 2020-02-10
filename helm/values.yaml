@@ -1,27 +1,32 @@
 # Declare variables to be passed into your templates.
 
 
-# Interactive
-Interactive:
-  Enabled: true
-
 # PVC
 
 ExistingPVC:
   # If true, use existing PVC on local cluster.
   # (temp, future PVCs will be dynamically configurable)
-  Enabled: false
+  Enabled: true
   Name: deepgtex-prp
-  Path: /workspace/dtp
+  Path: /workspace
 
 NewPVC:
   # If true, create new PVC on local cluster.
   # (temp, future PVCs will be dynamically configurable)
-  Enabled: true
+  Enabled: false
   Name: dtp-pvc-new
   Size: 20Gi
   StorageClass: nfs # Make sure storage class provisioner exists!
   Path: /workspace
+
+
+
+
+
+# Resource request per container
+Resources:
+  CPU: 250m
+  Memory: 1Gi
 
 
 # Aspera
@@ -39,8 +44,8 @@ iRODS:
   Enabled: true
   Secrets: true
 
-# AWS S3
-S3:
+# AWS CLI
+AWS:
   Enabled: true
   Secrets: true
 
