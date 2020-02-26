@@ -5,14 +5,12 @@
 
 ExistingPVC:
   # If true, use existing PVC on local cluster.
-  # (temp, future PVCs will be dynamically configurable)
   Enabled: true
-  Name: deepgtex-prp
+  Name: scidas-dev
   Path: /workspace
 
 NewPVC:
   # If true, create new PVC on local cluster.
-  # (temp, future PVCs will be dynamically configurable)
   Enabled: false
   Name: dtp-pvc-new
   Size: 20Gi
@@ -25,18 +23,22 @@ NewPVC:
 
 # Resource request per container
 Resources:
-  CPU: 250m
-  Memory: 1Gi
+  Requests:
+    CPU: 1
+    Memory: 4Gi
+  Limits:
+    CPU: 1
+    Memory: 4Gi
 
 
 # Aspera
 Aspera:
-  Enabled: true
+  Enabled: false
   Secrets: false
 
 # NDN
 NDN:
-  Enabled: true
+  Enabled: false
   Secrets: false
 
 # iRODS
@@ -59,6 +61,9 @@ SRAToolkit:
   Enabled: true
   Secrets: false
 
-
-
+# Globus
+# *fresh setup key required with each deployment* 
+Globus:
+  Enabled: true
+  Secrets: true
 

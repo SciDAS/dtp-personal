@@ -12,6 +12,7 @@ Currently, only interactive mode is supported. In the future, these transfers wi
 
 Right now, the supported protocols are:
 
+ - Globus Connect Personal
  - iRODS
  - Name-Defined Networking(NDN)
  - Aspera

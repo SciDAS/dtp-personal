@@ -6,4 +6,4 @@ AWS_ACCESS_KEY_ID="awsuser"
 AWS_SECRET_ACCESS_KEY="awspass"
 ACLI_USER="asperauser"
 ACLI_PASS="asperapass"
-
+GLOBUS_KEY="globuskey"

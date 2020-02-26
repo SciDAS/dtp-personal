@@ -6,20 +6,17 @@ metadata:
     app: {{ template "dtp.name" . }}
     chart: {{ template "dtp.chart" . }}
     release: {{ .Release.Name }}
-    instance: {{ .Values.Instance }}
 spec:
   replicas: {{ .Values.Replicas }}
   selector:
     matchLabels:
       app: {{ template "dtp.name" . }}
-      instance: {{ .Values.Instance }}
   template:
     metadata:
       labels:
         app: {{ template "dtp.name" . }}
         chart: {{ template "dtp.chart" . }}
         release: {{ .Release.Name }}
-        instance: {{ .Values.Instance }}
     spec:
       containers:               
       - name: dtp-base # Base image(also for local transfers)
@@ -28,8 +25,11 @@ spec:
         args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
-            cpu: {{ .Values.Resources.CPU }}
-            memory: {{ .Values.Resources.Memory }}
+            cpu: {{ .Values.Resources.Requests.CPU }}
+            memory: {{ .Values.Resources.Requests.Memory }}
+          limits:
+            cpu: {{ .Values.Resources.Limits.CPU }}
+            memory: {{ .Values.Resources.Limits.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
@@ -40,8 +40,11 @@ spec:
         args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && echo 'iinit ${IRODS_PASSWORD}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
-            cpu: {{ .Values.Resources.CPU }}
-            memory: {{ .Values.Resources.Memory }}
+            cpu: {{ .Values.Resources.Requests.CPU }}
+            memory: {{ .Values.Resources.Requests.Memory }}
+          limits:
+            cpu: {{ .Values.Resources.Limits.CPU }}
+            memory: {{ .Values.Resources.Limits.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
@@ -70,8 +73,11 @@ spec:
         args: ["-c", "apk update && apk upgrade && apk add bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
         resources:
           requests:
-            cpu: {{ .Values.Resources.CPU }}
-            memory: {{ .Values.Resources.Memory }}
+            cpu: {{ .Values.Resources.Requests.CPU }}
+            memory: {{ .Values.Resources.Requests.Memory }}
+          limits:
+            cpu: {{ .Values.Resources.Limits.CPU }}
+            memory: {{ .Values.Resources.Limits.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
@@ -96,8 +102,11 @@ spec:
         args: ["-c", "apk update && apk upgrade && apk add bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
         resources:
           requests:
-            cpu: {{ .Values.Resources.CPU }}
-            memory: {{ .Values.Resources.Memory }}
+            cpu: {{ .Values.Resources.Requests.CPU }}
+            memory: {{ .Values.Resources.Requests.Memory }}
+          limits:
+            cpu: {{ .Values.Resources.Limits.CPU }}
+            memory: {{ .Values.Resources.Limits.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
@@ -122,8 +131,11 @@ spec:
         args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
-            cpu: {{ .Values.Resources.CPU }}
-            memory: {{ .Values.Resources.Memory }}
+            cpu: {{ .Values.Resources.Requests.CPU }}
+            memory: {{ .Values.Resources.Requests.Memory }}
+          limits:
+            cpu: {{ .Values.Resources.Limits.CPU }}
+            memory: {{ .Values.Resources.Limits.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
@@ -135,8 +147,11 @@ spec:
         args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
-            cpu: {{ .Values.Resources.CPU }}
-            memory: {{ .Values.Resources.Memory }}
+            cpu: {{ .Values.Resources.Requests.CPU }}
+            memory: {{ .Values.Resources.Requests.Memory }}
+          limits:
+            cpu: {{ .Values.Resources.Limits.CPU }}
+            memory: {{ .Values.Resources.Limits.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
@@ -161,11 +176,38 @@ spec:
         args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
-            cpu: {{ .Values.Resources.CPU }}
-            memory: {{ .Values.Resources.Memory }}
+            cpu: {{ .Values.Resources.Requests.CPU }}
+            memory: {{ .Values.Resources.Requests.Memory }}
+          limits:
+            cpu: {{ .Values.Resources.Limits.CPU }}
+            memory: {{ .Values.Resources.Limits.Memory }}
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
+      {{ end }}
+      {{ if .Values.Globus.Enabled }} # Globus
+      - name: dtp-globus
+        image: ndslabs/gcp-docker
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "/opt/globusconnectpersonal/start-globus-connect.sh $SETUP_KEY {{ template "pvcPath" . }} && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        resources:
+          requests:
+            cpu: {{ .Values.Resources.Requests.CPU }}
+            memory: {{ .Values.Resources.Requests.Memory }}
+          limits:
+            cpu: {{ .Values.Resources.Limits.CPU }}
+            memory: {{ .Values.Resources.Limits.Memory }}
+        volumeMounts:
+        - name: vol-1
+          mountPath: {{ template "pvcPath" . }}
+        {{ if .Values.Globus.Secrets }}
+        env:  
+            - name: SETUP_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: globus
+                  key: SETUP_KEY
+        {{ end }}
       {{ end }}
       restartPolicy: Always
       volumes:
