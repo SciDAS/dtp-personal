@@ -81,6 +81,8 @@ Go over your secrets to make sure they are entered correctly(some will be base64
 
 To deploy the DTP, run [start](https://github.com/cbmckni/dtp/blob/master/start).
 
+`./start`
+
 It should output 'DTP started.' when finished.
 
 To interact with any of the running containers, run [interact](https://github.com/cbmckni/dtp/blob/master/interact).
