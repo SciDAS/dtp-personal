@@ -85,6 +85,14 @@ It should output 'DTP started.' when finished.
 
 To interact with any of the running containers, run [interact](https://github.com/cbmckni/dtp/blob/master/interact).
 
+`./interact`
+
+To pass commands to containers in the background(if an application/script wants to use a running DTP, for example), use [background](https://github.com/SciDAS/dtp/blob/master/background)
+
+`./background <--container1> 'command1' <--container2> 'command2' ....`
+
+ex: `./background --dtp-irods 'ils' --dtp-aws 'aws s3api list-buckets'`
+
 ## Delete
 
 To destroy the DTP when all transfers are complete, run `helm uninstall dtp`
