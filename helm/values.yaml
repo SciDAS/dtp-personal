@@ -6,8 +6,8 @@
 ExistingPVC:
   # If true, use existing PVC on local cluster.
   Enabled: true
-  Name: scidas-dev
-  Path: /workspace
+  Name: deepgtex-prp
+  Path: /workspace/dtp-scratch 
 
 NewPVC:
   # If true, create new PVC on local cluster.
@@ -42,28 +42,30 @@ NDN:
   Secrets: false
 
 # iRODS
+# SECRETS REQUIRED
 iRODS:
-  Enabled: true
-  Secrets: true
+  Enabled: false
+  Secrets: false
 
 # AWS CLI
 AWS:
-  Enabled: true
-  Secrets: true
+  Enabled: false
+  Secrets: false
 
 # MinIO
 Minio:
-  Enabled: true
+  Enabled: false
   Secrets: false
 
 # SRA Toolkit
 SRAToolkit:
-  Enabled: true
+  Enabled: false
   Secrets: false
 
 # Globus
+# SECRETS REQUIRED
 # *fresh setup key required with each deployment* 
 Globus:
-  Enabled: true
-  Secrets: true
+  Enabled: false
+  Secrets: false
 

@@ -22,7 +22,7 @@ spec:
       - name: dtp-base # Base image(also for local transfers)
         image: ubuntu
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        args: [ "mkdir -p {{ template "pvcPath" . }} && chmod -R 777 {{ template "pvcPath" . }} && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -37,7 +37,7 @@ spec:
       - name: dtp-irods
         image: cbmckni/dtp-irods 
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && echo 'iinit ${IRODS_PASSWORD}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        args: [ "mkdir -p {{ template "pvcPath" . }} && chmod -R 777 {{ template "pvcPath" . }} && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && echo 'iinit ${IRODS_PASSWORD}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -70,7 +70,7 @@ spec:
       - name: dtp-aws
         image: mesosphere/aws-cli
         command: ["/bin/sh"]
-        args: ["-c", "apk update && apk upgrade && apk add bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
+        args: ["-c", "apk update && apk upgrade && apk add bash && mkdir -p {{ template "pvcPath" . }} && chmod -R 777 {{ template "pvcPath" . }} && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -99,7 +99,7 @@ spec:
       - name: dtp-minio
         image: minio/mc
         command: ["/bin/sh"]
-        args: ["-c", "apk update && apk upgrade && apk add bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
+        args: ["-c", "apk update && apk upgrade && apk add bash && mkdir -p {{ template "pvcPath" . }} && chmod -R 777 {{ template "pvcPath" . }} && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -128,7 +128,7 @@ spec:
       - name: dtp-ndn
         image: peetonn/ndn-docker
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        args: [ "mkdir -p {{ template "pvcPath" . }} && chmod -R 777 {{ template "pvcPath" . }} && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -144,7 +144,7 @@ spec:
       - name: dtp-aspera
         image: ibmcom/aspera-cli
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        args: [ "mkdir -p {{ template "pvcPath" . }} && chmod -R 777 {{ template "pvcPath" . }} && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -173,7 +173,7 @@ spec:
       - name: dtp-sra-toolkit
         image: ncbi/sra-toolkit
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        args: [ "mkdir -p {{ template "pvcPath" . }} && chmod -R 777 {{ template "pvcPath" . }} && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -189,7 +189,7 @@ spec:
       - name: dtp-globus
         image: ndslabs/gcp-docker
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "/opt/globusconnectpersonal/start-globus-connect.sh $SETUP_KEY {{ template "pvcPath" . }} && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        args: [ "/opt/globusconnectpersonal/start-globus-connect.sh $SETUP_KEY {{ template "pvcPath" . }} && mkdir -p {{ template "pvcPath" . }} && chmod -R 777 {{ template "pvcPath" . }} && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}

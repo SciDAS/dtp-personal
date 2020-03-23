@@ -73,7 +73,7 @@ Next, enter your credentials in [config](https://github.com/SciDAS/dtp/blob/mast
 
 Finally, run [gen-secret](https://github.com/SciDAS/dtp/blob/master/helm/gen-secret): 
 
-`./helm/gen-secret`
+`./gen-secret config`
 
 Go over your secrets to make sure they are entered correctly(some will be base64 encoded and will not be human-readable).
 
