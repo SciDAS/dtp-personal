@@ -7,7 +7,7 @@ ExistingPVC:
   # If true, use existing PVC on local cluster.
   Enabled: true
   Name: deepgtex-prp
-  Path: /workspace/dtp-scratch 
+  Path: /workspace
 
 NewPVC:
   # If true, create new PVC on local cluster.
@@ -33,39 +33,39 @@ Resources:
 
 # Aspera
 Aspera:
-  Enabled: false
+  Enabled: true
   Secrets: false
 
 # NDN
 NDN:
-  Enabled: false
+  Enabled: true
   Secrets: false
 
 # iRODS
 # SECRETS REQUIRED
 iRODS:
-  Enabled: false
-  Secrets: false
+  Enabled: true
+  Secrets: true
 
 # AWS CLI
 AWS:
-  Enabled: false
-  Secrets: false
+  Enabled: true
+  Secrets: true
 
 # MinIO
 Minio:
-  Enabled: false
+  Enabled: true
   Secrets: false
 
 # SRA Toolkit
 SRAToolkit:
-  Enabled: false
+  Enabled: true
   Secrets: false
 
 # Globus
 # SECRETS REQUIRED
 # *fresh setup key required with each deployment* 
 Globus:
-  Enabled: false
-  Secrets: false
+  Enabled: true
+  Secrets: true
 
