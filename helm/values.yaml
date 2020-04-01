@@ -6,7 +6,7 @@
 ExistingPVC:
   # If true, use existing PVC on local cluster.
   Enabled: true
-  Name: deepgtex-prp
+  Name: teach-compbio
   Path: /workspace
 
 NewPVC:
@@ -33,7 +33,7 @@ Resources:
 
 # Aspera
 Aspera:
-  Enabled: true
+  Enabled: false
   Secrets: false
 
 # NDN
