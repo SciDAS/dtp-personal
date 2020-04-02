@@ -8,8 +8,6 @@ This is a Helm deployment that starts between 1..N containers, each representing
 
 All containers are mounted to the same PVC, the idea is that users can easily move data to and from Kubernetes clusters and multiple servers with a single deployment.
 
-Currently, only interactive mode is supported. In the future, these transfers will be able to happen in the background and be used by other applications.
-
 Right now, the supported protocols are:
 
  - Globus Connect Personal
