@@ -18,13 +18,16 @@ nano helm/values.yaml
 
 ./interact
 
+ils
+
+iget -r /scidasZone/home/cbmckni/pond-corg-input
+
 # Pull datasets using Background Mode
 
 ./background --dtp-sra-toolkit 'fastq-dump -I --split-files SRR649944 --outdir /workspace'
 
-# ./background --dtp-sra-toolkit 'fastq-dump -I --split-files SRR649944 --outdir /workspace' \
-#   --dtp-aspera 'ascp -T -l640M -i /home/aspera/.aspera/cli/etc/asperaweb_id_dsa.openssh \    
-#   anonftp@ftp.ncbi.nlm.nih.gov:SampleData/Genomes/Genomic_Analysis_Packages/ /workspace/dtp'
+./background --dtp-sra-toolkit 'fastq-dump -I --split-files SRR649944 --outdir /workspace/cole' \
+  --dtp-aspera 'ascp -T -l640M -i /home/aspera/.aspera/cli/etc/asperaweb_id_dsa.openssh anonftp@ftp.ncbi.nlm.nih.gov:SampleData/Genomes/Genomic_Analysis_Packages/ /workspace/cole'
 
 # Pull GEMMaker
 

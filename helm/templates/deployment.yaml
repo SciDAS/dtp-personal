@@ -126,9 +126,9 @@ spec:
       {{ end }}
       {{ if .Values.NDN.Enabled }} # Name Defined Network
       - name: dtp-ndn
-        image: peetonn/ndn-docker
+        image: dereddick/ndn-docker
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} &&  tail -f /dev/null" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && '/usr/local/bin/nfd -c $CONFIG > $LOG_FILE 2>&1' && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
