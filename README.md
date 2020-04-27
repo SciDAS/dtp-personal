@@ -10,11 +10,12 @@ All containers are mounted to the same PVC, the idea is that users can easily mo
 
 Right now, the supported protocols are:
 
+ - Google Cloud Products 
  - Globus Connect Personal
  - iRODS
  - Name-Defined Networking(NDN)
  - Aspera
- - S3
+ - Amazon Web Services
  - MinIO
  - SRA Toolkit(NCBI)
  - Local transfers(to/from the user's local machine)

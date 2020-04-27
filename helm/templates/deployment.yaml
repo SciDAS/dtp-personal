@@ -209,6 +209,22 @@ spec:
                   key: SETUP_KEY
         {{ end }}
       {{ end }}
+      {{ if .Values.Google.Enabled }} # Google Cloud
+      - name: dtp-gcp
+        image: google/cloud-sdk
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && tail -f /dev/null" ]
+        resources:
+          requests:
+            cpu: {{ .Values.Resources.Requests.CPU }}
+            memory: {{ .Values.Resources.Requests.Memory }}
+          limits:
+            cpu: {{ .Values.Resources.Limits.CPU }}
+            memory: {{ .Values.Resources.Limits.Memory }}
+        volumeMounts:
+        - name: vol-1
+          mountPath: {{ template "pvcPath" . }}
+      {{ end }}
       restartPolicy: Always
       volumes:
         - name: vol-1

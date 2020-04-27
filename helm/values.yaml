@@ -6,8 +6,8 @@
 ExistingPVC:
   # If true, use existing PVC on local cluster.
   Enabled: true
-  Name: deepgtex-prp
-  Path: /workspace/dtp-scratch 
+  Name: scidas-dev
+  Path: /workspace
 
 NewPVC:
   # If true, create new PVC on local cluster.
@@ -69,3 +69,7 @@ Globus:
   Enabled: false
   Secrets: false
 
+# Google Cloud
+Google:
+  Enabled: false
+  Secrets: false
