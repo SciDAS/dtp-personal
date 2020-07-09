@@ -126,7 +126,7 @@ spec:
       {{ end }}
       {{ if .Values.NDN.Enabled }} # Name Defined Network
       - name: dtp-ndn
-        image: dereddick/ndn-docker
+        image: cbmckni/ndn-tools
         command: [ "/bin/bash", "-c", "--" ]
         args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && '/usr/local/bin/nfd -c $CONFIG > $LOG_FILE 2>&1' && tail -f /dev/null" ]
         resources:
@@ -171,7 +171,7 @@ spec:
       {{ end }}
       {{ if .Values.SRAToolkit.Enabled }} # SRA Toolkit
       - name: dtp-sra-toolkit
-        image: ncbi/sra-toolkit
+        image: ncbi/sra-tools
         command: [ "/bin/bash", "-c", "--" ]
         args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && tail -f /dev/null" ]
         resources:
