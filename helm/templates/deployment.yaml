@@ -172,8 +172,8 @@ spec:
       {{ if .Values.SRAToolkit.Enabled }} # SRA Toolkit
       - name: dtp-sra-toolkit
         image: ncbi/sra-tools
-        command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && tail -f /dev/null" ]
+        command: [ "/bin/sh" ]
+        args: [ "-c", "apk update && apk upgrade && apk add bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
