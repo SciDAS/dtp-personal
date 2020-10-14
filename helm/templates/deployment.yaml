@@ -20,9 +20,9 @@ spec:
     spec:
       containers:               
       - name: dtp-base # Base image(also for local transfers)
-        image: ubuntu
+        image: {{ .Values.Base.Image }}
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} &&  tail -f /dev/null" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && mkdir -p {{ template "pvcPath" . }}/dtp-data && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }}/dtp-data && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -37,7 +37,7 @@ spec:
       - name: dtp-irods
         image: cbmckni/dtp-irods 
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && echo 'iinit ${IRODS_PASSWORD}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} &&  tail -f /dev/null" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -48,29 +48,12 @@ spec:
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
-        {{ if .Values.iRODS.Secrets }}
-        - name: ienv
-          mountPath: "/etc/.irods"
-        env: 
-            - 
-              name: IRODS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: irods
-                  key: IRODS_PASSWORD
-            - 
-              name: IRODS_ENVIRONMENT_FILE
-              valueFrom:
-                secretKeyRef:
-                  name: irods
-                  key: IRODS_ENVIRONMENT_FILE
-        {{ end }}
       {{ end }}
       {{ if .Values.AWS.Enabled }} # AWS CLI
       - name: dtp-aws
         image: mesosphere/aws-cli
         command: ["/bin/sh"]
-        args: ["-c", "apk update && apk upgrade && apk add bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && tail -f /dev/null"]
+        args: ["-c", "apk update && apk upgrade && apk add --no-cache bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -81,25 +64,12 @@ spec:
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
-        {{ if .Values.AWS.Secrets }}
-        env:  
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: aws
-                  key: AWS_ACCESS_KEY_ID
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: aws
-                  key: AWS_SECRET_ACCESS_KEY 
-        {{ end }}
       {{ end }}
       {{ if .Values.Minio.Enabled }} # MinIO
       - name: dtp-minio
         image: minio/mc
         command: ["/bin/sh"]
-        args: ["-c", "apk update && apk upgrade && apk add bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && tail -f /dev/null"]
+        args: ["-c", "apk update && apk upgrade && apk add --no-cache bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -110,25 +80,12 @@ spec:
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
-        {{ if .Values.Minio.Secrets }}
-        env:  
-            - name: AWS_ACCESS_KEY_ID
-              valueFrom:
-                secretKeyRef:
-                  name: aws
-                  key: AWS_ACCESS_KEY_ID
-            - name: AWS_SECRET_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: aws
-                  key: AWS_SECRET_ACCESS_KEY
-        {{ end }}
       {{ end }}
       {{ if .Values.NDN.Enabled }} # Name Defined Network
       - name: dtp-ndn
         image: cbmckni/ndn-tools
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && '/usr/local/bin/nfd -c $CONFIG > $LOG_FILE 2>&1' && tail -f /dev/null" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -144,7 +101,7 @@ spec:
       - name: dtp-aspera
         image: ibmcom/aspera-cli
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && tail -f /dev/null" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -155,25 +112,12 @@ spec:
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
-        {{ if .Values.Aspera.Secrets }}
-        env:  
-            - name: ACLI_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: aspera
-                  key: ACLI_USERNAME
-            - name: ACLI_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: aspera
-                  key: ACLI_PASSWORD
-        {{ end }}
       {{ end }}
-      {{ if .Values.SRAToolkit.Enabled }} # SRA Toolkit
+      {{ if .Values.SRATools.Enabled }} # SRA Toolkit
       - name: dtp-sra-toolkit
         image: ncbi/sra-tools
         command: [ "/bin/sh" ]
-        args: [ "-c", "apk update && apk upgrade && apk add bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && tail -f /dev/null" ]
+        args: [ "-c", "apk update && apk upgrade && apk add --no-cache util-linux bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -189,7 +133,7 @@ spec:
       - name: dtp-globus
         image: ndslabs/gcp-docker
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "/opt/globusconnectpersonal/start-globus-connect.sh $SETUP_KEY {{ template "pvcPath" . }} && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && tail -f /dev/null" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -200,20 +144,12 @@ spec:
         volumeMounts:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
-        {{ if .Values.Globus.Secrets }}
-        env:  
-            - name: SETUP_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: globus
-                  key: SETUP_KEY
-        {{ end }}
       {{ end }}
       {{ if .Values.Google.Enabled }} # Google Cloud
       - name: dtp-gcp
         image: google/cloud-sdk
         command: [ "/bin/bash", "-c", "--" ]
-        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && chmod -R 777 {{ template "pvcPath" . }} && tail -f /dev/null" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
@@ -225,18 +161,28 @@ spec:
         - name: vol-1
           mountPath: {{ template "pvcPath" . }}
       {{ end }}
+      {{ if .Values.FDT.Enabled }} # Fast Data Transfer
+      - name: dtp-fdt
+        image: cbmckni/fdt-docker
+        command: [ "/bin/bash", "-c", "--" ]
+        args: [ "echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null" ]
+        resources:
+          requests:
+            cpu: {{ .Values.Resources.Requests.CPU }}
+            memory: {{ .Values.Resources.Requests.Memory }}
+          limits:
+            cpu: {{ .Values.Resources.Limits.CPU }}
+            memory: {{ .Values.Resources.Limits.Memory }}
+        volumeMounts:
+        - name: vol-1
+          mountPath: {{ template "pvcPath" . }}
+      {{ end }}  
       restartPolicy: Always
       volumes:
         - name: vol-1
           persistentVolumeClaim:
             claimName: {{ template "pvcName" . }}
-        {{ if .Values.iRODS.Secrets }}
-        - name: ienv
-          secret:
-            secretName: irods
-            defaultMode: 256
-        {{ end }}
-
+                  
 
 # Variables
 

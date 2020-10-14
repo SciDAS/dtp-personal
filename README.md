@@ -4,20 +4,27 @@
 
 *Better documentation coming soon.*
 
-This is a Helm deployment that starts between 1..N containers, each representing a different data transfer protocol. 
+A Data Transfer Pod is a configurable collection of containers, each representing a different data transfer protocol/interface. 
 
-All containers are mounted to the same PVC, the idea is that users can easily move data to and from Kubernetes clusters and multiple servers with a single deployment.
+All containers are mounted to the same Persisten Volume Claim(PVC), so users can easily move data to/from Kubernetes clusters and multiple servers with a single deployment.
+
+**USE CASE:** DTP-Personal is intended to be used by a single user, or a single group of users using the name PVC. Users must have the permission to deploy pods using *kubectl*. 
+
+DTP-Personal can be used simply to mount a single container to the PVC to perform basic operations, or to automate complex data movement between a Kubernetes cluster and various endpoints.
+
+For use cases where end users will not have *kubectl* access, or where multiple groups need controlled access to the same PVC, see [DTP-Requests](https://github.com/cbmckni/dtp-requests). 
 
 Right now, the supported protocols are:
 
- - Google Cloud Products 
- - Globus Connect Personal
- - iRODS
- - Name-Defined Networking(NDN)
- - Aspera
- - Amazon Web Services
- - MinIO
- - SRA Toolkit(NCBI)
+ - [Google Cloud SDK](https://cloud.google.com/sdk) 
+ - [Globus Connect Personal](https://app.globus.org/)
+ - [iRODS](https://irods.org/)
+ - [Name-Defined Networking(NDN)](https://named-data.net/)
+ - [Aspera CLI](https://www.ibm.com/support/knowledgecenter/en/SSBS6K_3.2.0/featured_applications/aspera_cli.html)
+ - [Amazon Web Services](https://aws.amazon.com/cli/)
+ - [MinIO](https://min.io/)
+ - [NCBI's SRA Tools](https://github.com/ncbi/sra-tools)
+ - [Fast Data Transfer(FDT)](http://monalisa.cern.ch/FDT/)
  - Local transfers(to/from the user's local machine)
 
 ## Installation
@@ -28,7 +35,7 @@ First, install dependencies:
 
 Make sure both Helm and kubectl are configured properly with the Kubernetes cluster of your choosing.
 
-The K8s cluster MUST have either a valid PVC or storage class. If a valid PVC does not exist, here are some example instructions to set up a NFS storage class:
+The K8s cluster MUST have either a valid PVC or storage class. If a valid PVC or storage class does not exist, here are some example instructions to set up a NFS storage class:
 
 ### Create NFS StorageClass (optional)
 
@@ -60,22 +67,6 @@ Configure the PVC section to either create a new PVC or use an existing one.
 
 Enable/Disable each data transfer protocol to your needs by changing them to `true` or `false`.
 
-### Secrets
-
-On deployment, the Data Transfer Pod will automatically authenticate your credentials with the associated protocol(s).
-
-*This is not required for Interactive Mode, but necessary for some background transfers.*
-
-In [values.yaml](https://github.com/cbmckni/dtp/blob/master/helm/values.yaml), you must either enable/disable the secrets for each protocol. 
-
-Next, enter your credentials in [config](https://github.com/SciDAS/dtp/blob/master/helm/config).
-
-Finally, run [gen-secret](https://github.com/SciDAS/dtp/blob/master/helm/gen-secret): 
-
-`./gen-secret config`
-
-Go over your secrets to make sure they are entered correctly(some will be base64 encoded and will not be human-readable).
-
 ## Usage
 
 To deploy the DTP, run [start](https://github.com/cbmckni/dtp/blob/master/start).
@@ -88,11 +79,23 @@ To interact with any of the running containers, run [interact](https://github.co
 
 `./interact`
 
-To pass commands to containers in the background(if an application/script wants to use a running DTP, for example), use [background](https://github.com/SciDAS/dtp/blob/master/background)
+To pass commands to containers in the background(if an application/script wants to use a running DTP, for example), use [background](https://github.com/SciDAS/dtp/blob/master/background).
 
 `./background <--container1> 'command1' <--container2> 'command2' ....`
 
 ex: `./background --dtp-irods 'ils' --dtp-aws 'aws s3api list-buckets'`
+
+*These commands are run in sequence from first-to-last.*
+
+### Local Transfers
+
+To copy data from your local machine to the K8s cluster, use [copy-to](https://github.com/SciDAS/dtp/blob/master/copy-to):
+
+`copy-to /local/path /remote/path`
+
+To copy data from the K8s cluster to your local machine, use [copy-from](https://github.com/SciDAS/dtp/blob/master/copy-from):
+
+`copy-from /remote/path /local/path`
 
 ## Delete
 
