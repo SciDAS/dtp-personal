@@ -1,8 +1,5 @@
 # Data Transfer Pod - Personal
 
-**WORK IN PROGRESS**
-
-*Better documentation coming soon.*
 
 A Data Transfer Pod is a configurable collection of containers, each representing a different data transfer protocol/interface. 
 
