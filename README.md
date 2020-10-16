@@ -16,7 +16,7 @@ Right now, the supported protocols are:
  - [Google Cloud SDK](https://cloud.google.com/sdk) 
  - [Globus Connect Personal](https://app.globus.org/)
  - [iRODS](https://irods.org/)
- - [Name-Defined Networking(NDN)](https://named-data.net/)
+ - [Named-Data Networking(NDN)](https://named-data.net/)
  - [Aspera CLI](https://www.ibm.com/support/knowledgecenter/en/SSBS6K_3.2.0/featured_applications/aspera_cli.html)
  - [Amazon Web Services](https://aws.amazon.com/cli/)
  - [MinIO](https://min.io/)
