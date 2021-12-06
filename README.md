@@ -68,13 +68,13 @@ Enable/Disable each data transfer protocol to your needs by changing them to `tr
 
 To deploy the DTP, run [start](https://github.com/cbmckni/dtp/blob/master/start).
 
-`./start`
+`./start <DTP_NAME>`
 
 It should output 'DTP started.' when finished.
 
 To interact with any of the running containers, run [interact](https://github.com/cbmckni/dtp/blob/master/interact).
 
-`./interact`
+`./interact <DTP_NAME>`
 
 To pass commands to containers in the background(if an application/script wants to use a running DTP, for example), use [background](https://github.com/SciDAS/dtp/blob/master/background).
 

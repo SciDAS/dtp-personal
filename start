@@ -15,8 +15,8 @@
 #done
 
 # Deploy DTP
-helm install dtp helm
-POD="$(kubectl get pods | grep dtp | grep ContainerCreating | awk '{print $1}')"
+helm install $1 helm
+POD="$(kubectl get pods | grep ${1} | grep ContainerCreating | awk '{print $1}')"
 echo "Data Transfer Pod: ${POD}"
 
 POD_STATUS="$(kubectl get pod ${POD} | awk 'FNR == 2 {print $3}')"

@@ -2,7 +2,7 @@
 
 
 # Get DTP and set containers to an array
-POD="$(kubectl get pods | grep dtp | grep Running | awk '{print $1}')"
+POD="$(kubectl get pods | grep ${1} | grep Running | awk '{print $1}')"
 ARRAY=($(kubectl get pods ${POD} -o jsonpath='{.spec.containers[*].name}'))
 
 # Iterate through interactive mode

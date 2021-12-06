@@ -67,9 +67,9 @@ spec:
       {{ end }}
       {{ if .Values.Minio.Enabled }} # MinIO
       - name: dtp-minio
-        image: minio/mc
+        image: bitnami/minio-client
         command: ["/bin/sh"]
-        args: ["-c", "apk update && apk upgrade && apk add --no-cache bash && echo 'cd {{ template "pvcPath" . }}' >> ~/.bashrc && source ~/.bashrc && tail -f /dev/null"]
+        args: ["-c", "tail -f /dev/null"]
         resources:
           requests:
             cpu: {{ .Values.Resources.Requests.CPU }}
